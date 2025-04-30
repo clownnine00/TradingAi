@@ -1,0 +1,6 @@
+2025-04-24 00:14:37.842448 - Error loading model: [Errno 2] No such file or directory: 'random_forest_model.pkl'
+2025-04-24 00:15:31.811853 - Error loading model: [Errno 2] No such file or directory: 'random_forest_model.pkl'
+2025-04-24 01:24:47.721764 - Starting model training
+2025-04-24 01:24:48.033267 - Random Forest model successfully trained.
+2025-04-24 01:24:48.048731 - Model saved to random_forest_model.pkl
+2025-04-24 01:24:48.062202 - Data saved to market_data.csv
