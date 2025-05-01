@@ -43,21 +43,33 @@ class MT5Connector:
             print("🔌 Disconnected from MT5")
 
     def is_market_open(self, symbol):
-        # Updated to use symbol_info.trade_time_flags or an alternative check for market status
+        # Retrieve symbol information
         info = mt5.symbol_info(symbol)
-        if info and info.trade_time_flags is not None:
-            return info.trade_time_flags != 0
-        return False
+        if info is None:
+            print(f"⚠️ Symbol {symbol} not found.")
+            return False
+        
+        # Check if the market is open based on session deals or buy orders
+        return info.session_deals > 0 or info.session_buy_orders > 0
 
     def get_account_info(self):
         account_info = mt5.account_info()
         if account_info is None:
             raise ValueError("Failed to retrieve account information")
-        return account_info
+        # Convert the account_info object into a dictionary for compatibility
+        return {
+            "login": account_info.login,
+            "balance": account_info.balance,
+            "equity": account_info.equity,
+            "margin": account_info.margin,
+            "margin_free": account_info.margin_free,
+            "margin_level": account_info.margin_level,
+            "profit": account_info.profit
+        }
 
     def get_account_balance(self):
         info = self.get_account_info()
-        return info.balance if info else 0.0
+        return info["balance"] if info else 0.0
 
     def get_current_price(self, symbol):
         tick = mt5.symbol_info_tick(symbol)
@@ -266,5 +278,3 @@ if connector.connect():
     print(analyzer.analyze_performance())
 else:
     print("❌ Failed to connect to MT5.")
-
-
