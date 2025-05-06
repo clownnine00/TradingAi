@@ -31,8 +31,7 @@ def load_or_train_model():
     strategy = RandomForestStrategy()
 
     if os.path.exists(model_filename):
-        with open(model_filename, 'rb') as f:
-            strategy.model = pickle.load(f)
+        strategy.load_model(model_filename)
     else:
         st.warning("Model not found. Training a new model from default or generated data.")
         try:
@@ -48,8 +47,7 @@ def load_or_train_model():
             st.info("Dummy training data used for model training.")
         strategy.train(df)
         st.success("Model trained successfully.")
-        with open(model_filename, 'wb') as f:
-            pickle.dump(strategy.model, f)
+        strategy.save_model(model_filename)
     return strategy
 
 # Lazy load the strategy
@@ -95,7 +93,7 @@ with st.sidebar:
 
     # Trading controls
     if st.session_state.connected:
-        st.header("⚙ Trade Setup")
+        st.header("⚙️ Trade Setup")
 
         # Dropdown for available symbols with typing support
         symbol = st.selectbox("Search or Select Symbol", st.session_state.symbols)
